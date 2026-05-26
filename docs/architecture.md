@@ -2,161 +2,132 @@
 
 ## Overview
 
-resona ios is a native SwiftUI client that presents a unified music library from two sources: local on-device files and a streaming resona desktop server. Both sources share one playback engine, one queue, and one UI surface. The architecture is designed so source-switching is transparent to the view layer.
+resona ios v1 is a local-first native iOS music player. it plays FLAC and MP3 files stored on the device. mac mini streaming is a planned second milestone — not part of the current architecture. the system is designed so streaming can be added as a second `PlaybackSource` conformer without restructuring the engine or UI.
 
-## System Context
+## System Context (v1 — local only)
 
 ```text
 SwiftUI views
-  -> @Observable view models / environment objects
-  -> PlaybackEngine (AVPlayer, queue, NowPlayingBridge)
-  -> LibraryStore (RemoteLibrary + LocalLibrary merged)
-  -> ServerSession (HTTP to resona mac mini)
-  -> AVFoundation + MediaPlayer framework
+  -> @Observable view models / @Environment
+  -> PlaybackEngine (AVPlayer, QueueManager, NowPlayingBridge)
+  -> LibraryStore (LocalLibrary only in v1)
+  -> LibraryIndexer (AVAsset metadata, file discovery, SwiftData)
+  -> AVFoundation + MediaPlayer framework + CryptoKit
 ```
 
 ## Source Model
 
 ### `PlaybackSource` Protocol
 
-All audio enters through one protocol. Views and the queue never care which source backs a track.
+Introduced now with one conformer. `StreamSource` added in milestone 2 without touching the engine.
 
 ```
-PlaybackSource
-  ├── LocalSource   — AVPlayer with local file URL (on-device)
-  └── StreamSource  — AVPlayer with HTTP URL from resona server
-                      (byte-range streaming required for seeking)
+PlaybackSource (protocol)
+  └── LocalSource   — resolves a security-scoped file URL from a LibraryRoot bookmark
 ```
 
-`PlaybackEngine` holds the active `AVPlayer` instance. When a track's source changes mid-queue (mixed local + remote queue), the engine swaps player items without breaking transport state.
+`PlaybackEngine` loads an `AVPlayerItem` from whatever URL `PlaybackSource` resolves. Views never see source type.
 
 ## Module Layout
 
-### `Sources/Server/`
-
-Network boundary to the resona mac mini.
-
-- `ServerSession` — base URL management, health ping, retry policy. All HTTP calls go through this; views and stores never use raw `URLSession` directly.
-- `ServerDiscovery` — Bonjour browser for `_resona._tcp`, emits resolved URL. Falls back gracefully when mDNS is unavailable.
-- `ServerSettingsStore` — persists manual IP/port entry from Settings view.
-
-API surface (contracts defined in the resona desktop repo):
-
-| Endpoint | Purpose |
-|---|---|
-| `GET /library` | full library JSON — tracks, albums, artists, playlists |
-| `GET /stream/:id` | audio stream, byte-range capable |
-| `GET /artwork/:id` | album art JPEG/PNG |
-| `GET /now-playing` | SSE stream for real-time playback state (optional) |
-
 ### `Sources/Library/`
 
-Merges remote and local track catalogs into one surface.
+Owns the local audio catalog.
 
 ```
-LibraryStore              — @Observable actor, single source of truth for library data
-  ├── RemoteLibrary       — fetches /library from ServerSession, caches locally
-  └── LocalLibrary        — indexes on-device audio files (Music app / Files / imported)
+LibraryStore (actor)          — public surface: [Track], [Album], [Artist], scan triggers
+  └── LibraryIndexer (actor)  — file discovery, metadata extraction, SwiftData upsert
+
+SwiftData models:
+  Track        — all metadata fields + fileBookmark (Data) + artworkPath + sourceHash
+  LibraryRoot  — security-scoped bookmark (Data) + displayName + rootHash
 ```
 
-`LibraryStore` exposes unified `[Track]`, `[Album]`, `[Artist]`, `[Playlist]` arrays. Each `Track` carries a `source: PlaybackSource` field. Views never branch on source type.
+**Track identity:** SHA256 hash of `"track\0<relative-path-from-root>"` — same strategy as resona desktop's `stable_identifier(namespace, value)`. Implemented with `CryptoKit.SHA256`.
 
-Track identity rules:
-- Remote tracks: server-assigned UUID string
-- Local tracks: stable hash of file path + title + artist metadata
-- IDs are not globally unique across sources — never compare remote ID against local ID
+**Metadata extraction pipeline:**
+1. Start security-scoped access on `LibraryRoot.bookmark`
+2. Walk directory tree recursively via `FileManager` — collect `.flac` and `.mp3` files
+3. For each file: load `AVAsset`, await `.metadata`, extract title/artist/album/albumArtist/genre/trackNumber/discNumber/year/duration via `AVMetadataItem`
+4. Extract artwork from `commonKeyArtwork`, write JPEG to app support directory, store path on `Track`
+5. Compute `sourceHash` from file URL + modification date
+6. SwiftData: insert new tracks, update changed (hash mismatch), delete stale (path gone)
+
+**Normalization fallback chain (matches resona desktop):**
+- `title` → tag title → filename stem (whitespace normalized)
+- `artist` → tag artist → tag albumArtist → nil
+- `album` → tag album → parent folder name → nil
+- `albumArtist` → tag albumArtist → tag artist → nil
+
+**Album aggregation:** Albums are not persisted — computed from `[Track]` at query time, grouped by `(album, albumArtist)`. Same approach as resona: no separate album table for v1.
 
 ### `Sources/Playback/`
 
 Owns all playback state. Views observe; views do not own transport truth.
 
 ```
-PlaybackEngine              — @Observable @MainActor, injected via SwiftUI environment
-  ├── QueueManager          — ordered track list, auto-advance, shuffle, repeat modes
-  ├── NowPlayingBridge      — MPNowPlayingInfoCenter + MPRemoteCommandCenter wiring
-  └── PlaybackSession       — play history, position persistence across launches
+PlaybackEngine (@Observable @MainActor)
+  ├── QueueManager          — [Track], currentIndex, auto-advance, shuffle (Fisher-Yates), repeat (off/one/all)
+  ├── NowPlayingBridge      — MPNowPlayingInfoCenter + MPRemoteCommandCenter
+  └── PlaybackSession       — UserDefaults: last trackId + position, restored on launch
 ```
 
-`PlaybackEngine` is the single source of truth for:
-- active track identity
-- transport mode (play / pause / stopped)
-- playback position and duration
-- queue order
+**AVPlayer lifecycle:**
+- `play(track:)` → resolve `LocalSource` bookmark → create `AVPlayerItem(url:)` → `player.replaceCurrentItem`
+- `AVPlayerItem.didPlayToEndTime` notification → `QueueManager.advance()` → next track
+- `AVAudioSession.Category.playback` set at launch — enables background audio, silences on ringer mute
 
-Views observe `PlaybackEngine` directly via `@Environment`. No prop-drilling, no duplicated state.
-
-AVPlayer configuration:
-- local tracks: `AVPlayerItem(url: localFileURL)`
-- stream tracks: `AVPlayerItem(url: httpStreamURL)` — server must respond to `Range:` headers or seeking breaks
+**`NowPlayingBridge` responsibilities:**
+- `MPNowPlayingInfoCenter.default()` updated on every track change and seek: title, artist, album, `MPMediaItemArtwork`, elapsed time, duration, playback rate
+- `MPRemoteCommandCenter`: play, pause, togglePlayPause, nextTrack, previousTrack, `changePlaybackPositionCommand` — all route through `PlaybackEngine` as the single mutation path
 
 ### `Sources/UI/`
 
-View layer. SwiftUI only. UIKit only where AVKit demands it.
+SwiftUI only. No UIKit.
 
 ```
-AppRoot
-  ├── TabBar               — Home | Library | Search | Settings
-  ├── MiniPlayer           — persistent bottom bar, taps → FullPlayer sheet
-  └── FullPlayer           — sheet: artwork, transport, queue panel
+AppRoot (@main)
+  └── TabView
+        ├── LibraryTab
+        │     ├── TracksView        — LazyVStack table, sort picker, inline search
+        │     ├── AlbumsView        — LazyVGrid 2-col artwork cards
+        │     └── ArtistsView       — List with circular avatars → AlbumDetailView
+        ├── QueueView               — current queue list, now-playing highlighted
+        └── SettingsView            — library roots, scan status, format info
 
-Home                       — recents, playlists, albums rows
-Library                    — Tracks | Albums | Artists | Playlists tabs
-Search                     — cross-entity, client-side scored
-Settings                   — server discovery, manual IP, local library roots
+MiniPlayer                          — persistent overlay above tab bar
+FullPlayer                          — sheet with artwork, vinyl rotation, transport, queue panel
 ```
 
-Navigation model: tab bar at root, sheet presentation for full player, push navigation within tabs.
+**Navigation:** `TabView` at root. Push navigation within Library tab via `NavigationStack`. `FullPlayer` as `.sheet` on `MiniPlayer` tap. No drawer, no hamburger.
 
 ## Concurrency Model
 
-Swift 6 strict concurrency enforced throughout.
+Swift 6 strict concurrency.
 
-- `LibraryStore`, `ServerSession`, `ServerDiscovery` — `actor` for shared mutable state
+- `LibraryStore`, `LibraryIndexer` — `actor`
 - `PlaybackEngine` — `@Observable @MainActor`
-- All `@Observable` view models — `@MainActor`
-- No `DispatchQueue.main.async` — use `await MainActor.run` or `@MainActor` annotation
+- AVAsset metadata loading — `await asset.loadMetadata(...)` (async)
+- File scanning — `Task { }` launched from `LibraryStore`, progress published via `AsyncStream`
+- No `DispatchQueue.main.async` — `@MainActor` annotation or `await MainActor.run`
 
-## Data Persistence
+## Persistence
 
-- `SwiftData` — local library index cache, server session metadata
-- `UserDefaults` — lightweight settings (manual IP, last-used server, display prefs)
-- Position persistence: `PlaybackSession` writes last-played track + position on background task
+- `SwiftData` — `Track`, `LibraryRoot` models. Container in app support directory.
+- `UserDefaults` — playback position, last track ID, display preferences.
+- Artwork — JPEG files written to `FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!/artwork/`.
+- Security-scoped bookmarks — stored as `Data` on `LibraryRoot`. Started/stopped around all file access.
 
-## Lock Screen and CarPlay
+## Lock Screen
 
-`NowPlayingBridge` wires:
-- `MPNowPlayingInfoCenter.default()` — active track metadata, artwork, position
-- `MPRemoteCommandCenter` — play, pause, next, previous, seek commands from lock screen / headphones / CarPlay
+`NowPlayingBridge` wires `MPNowPlayingInfoCenter` and `MPRemoteCommandCenter`. Requires device for meaningful testing — simulator lock screen behavior is incomplete.
 
-CarPlay requires a separate `CPTemplateApplicationScene` entitlement and a dedicated template hierarchy. Lock screen integration works in simulator; CarPlay requires device + vehicle or Xcode CarPlay simulator.
+## Milestone 2 Extension Points
 
-## Server Discovery Flow
+When mac mini streaming is added:
+- `StreamSource: PlaybackSource` added — `PlaybackEngine` unchanged
+- `RemoteLibrary` added alongside `LocalLibrary` in `LibraryStore`
+- `ServerSession` and `ServerDiscovery` added to a new `Sources/Server/` module
+- `LibraryStore` gains a merge step — no structural change to `PlaybackEngine` or UI
 
-1. `ServerDiscovery` starts a `NWBrowser` for `_resona._tcp`
-2. On resolution, emits host + port → `ServerSession` constructs base URL
-3. If mDNS fails (VPN, enterprise router), `ServerSettingsStore` provides manual IP
-4. `ServerSession` pings `/library` to confirm connectivity before marking server ready
-5. Settings view always exposes manual IP entry as a fallback
-
-## Playback Flow (Streamed Track)
-
-1. User selects a remote track in Library
-2. `LibraryStore` resolves `StreamSource(url: serverSession.streamURL(id:))`
-3. `PlaybackEngine.play(track:)` creates `AVPlayerItem` from stream URL
-4. `AVPlayer` issues byte-range HTTP requests to resona server
-5. `NowPlayingBridge` updates `MPNowPlayingInfoCenter` with track metadata + artwork
-6. Transport commands from lock screen route through `MPRemoteCommandCenter` back to `PlaybackEngine`
-
-## Playback Flow (Local Track)
-
-1. User selects a local track
-2. `LocalLibrary` resolves local file URL
-3. `PlaybackEngine.play(track:)` creates `AVPlayerItem` from file URL
-4. Identical transport flow from that point — source is transparent to the engine surface
-
-## Performance Constraints
-
-- No full-library hydration on app boot — paginate or lazy-load from `LibraryStore`
-- Artwork fetched on demand, cached with `URLCache`
-- Background audio session required (`AVAudioSession.Category.playback`) — no interruption on screen lock
-- Background task for position persistence — short-lived, does not keep app alive indefinitely
+Nothing in the v1 architecture needs to be undone. The source protocol and module boundaries are already shaped to accept the second source.

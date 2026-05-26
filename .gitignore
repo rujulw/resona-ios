@@ -6,6 +6,7 @@
 *.xcworkspace/*
 !*.xcworkspace/xcshareddata/
 **/*.xcscheme
+!*.xcodeproj/xcshareddata/xcschemes/*.xcscheme
 xcuserdata/
 *.xcuserstate
 *.xcscmblueprint

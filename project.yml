@@ -1,0 +1,74 @@
+name: ResonaIOS
+options:
+  minimumXcodeVersion: "15.4"
+  createIntermediateGroups: true
+
+configs:
+  Debug: debug
+  Release: release
+
+targets:
+  ResonaIOS:
+    type: application
+    platform: iOS
+    deploymentTarget: "17.0"
+    sources:
+      - path: Sources
+    settings:
+      base:
+        SWIFT_VERSION: "6.0"
+        PRODUCT_BUNDLE_IDENTIFIER: com.rujulw.resonaios
+        MARKETING_VERSION: "0.1.0"
+        CURRENT_PROJECT_VERSION: "1"
+        SWIFT_STRICT_CONCURRENCY: complete
+        ENABLE_PREVIEWS: "YES"
+    info:
+      path: Sources/Info.plist
+      properties:
+        CFBundleDisplayName: Resona
+        UILaunchScreen:
+          UIColorName: ""
+          UIImageName: ""
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+          UISceneConfigurations: {}
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        UIBackgroundModes:
+          - audio
+        NSLocalNetworkUsageDescription: "Resona uses your local network to connect to your Mac Mini server."
+        UIFileSharingEnabled: true
+        LSSupportsOpeningDocumentsInPlace: true
+        UIRequiresFullScreen: false
+
+  ResonaIOSTests:
+    type: bundle.unit-test
+    platform: iOS
+    deploymentTarget: "17.0"
+    sources:
+      - path: Tests
+    settings:
+      base:
+        SWIFT_VERSION: "6.0"
+        SWIFT_STRICT_CONCURRENCY: complete
+    dependencies:
+      - target: ResonaIOS
+
+schemes:
+  ResonaIOS:
+    build:
+      targets:
+        ResonaIOS: all
+        ResonaIOSTests: [test]
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - ResonaIOSTests
+    profile:
+      config: Release
+    analyze:
+      config: Debug
+    archive:
+      config: Release

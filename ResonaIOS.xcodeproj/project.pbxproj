@@ -1,0 +1,415 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1542CDE4F6974EC443A43F19 /* ResonaIOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2A645AFBDADAF1254216C82 /* ResonaIOSApp.swift */; };
+		C916C3E47B4F58B2501EFC9D /* ResonaIOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8471017B3CA3CB31E47CA8E /* ResonaIOSTests.swift */; };
+		FFACD447ADB3F02C3E9A3046 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC65097413FDDFD51A344BA /* ContentView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		30A01544C204E500067152B3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FC0984912893F2FD6B278C0D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 639D2F6A1356FBC3A884E74E;
+			remoteInfo = ResonaIOS;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		5AA25268FE2B091166E9D6A2 /* ResonaIOSTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = ResonaIOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		5DC65097413FDDFD51A344BA /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		935F8BFD0429FAC28599E6F9 /* ResonaIOS.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = ResonaIOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C8701A489FC4CD018B528B04 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		D8471017B3CA3CB31E47CA8E /* ResonaIOSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResonaIOSTests.swift; sourceTree = "<group>"; };
+		F2A645AFBDADAF1254216C82 /* ResonaIOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResonaIOSApp.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		3CC68B94A72D285E308F1A4F = {
+			isa = PBXGroup;
+			children = (
+				697310B5376A940A82EC4045 /* Sources */,
+				A4BFF23A57181BDC9C367096 /* Tests */,
+				64D0C06A995422ACC4A96C87 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		5465D503E6C2972094DA52EE /* App */ = {
+			isa = PBXGroup;
+			children = (
+				5DC65097413FDDFD51A344BA /* ContentView.swift */,
+				F2A645AFBDADAF1254216C82 /* ResonaIOSApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		64D0C06A995422ACC4A96C87 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				935F8BFD0429FAC28599E6F9 /* ResonaIOS.app */,
+				5AA25268FE2B091166E9D6A2 /* ResonaIOSTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		697310B5376A940A82EC4045 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				C8701A489FC4CD018B528B04 /* Info.plist */,
+				5465D503E6C2972094DA52EE /* App */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		A4BFF23A57181BDC9C367096 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				B05139525ADB29E9B43CB108 /* ResonaIOSTests */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		B05139525ADB29E9B43CB108 /* ResonaIOSTests */ = {
+			isa = PBXGroup;
+			children = (
+				D8471017B3CA3CB31E47CA8E /* ResonaIOSTests.swift */,
+			);
+			path = ResonaIOSTests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		639D2F6A1356FBC3A884E74E /* ResonaIOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 55AF887119EB77C6075A3DBA /* Build configuration list for PBXNativeTarget "ResonaIOS" */;
+			buildPhases = (
+				A5713C79DA7FB26F942B3610 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ResonaIOS;
+			packageProductDependencies = (
+			);
+			productName = ResonaIOS;
+			productReference = 935F8BFD0429FAC28599E6F9 /* ResonaIOS.app */;
+			productType = "com.apple.product-type.application";
+		};
+		967CA3C0404A10D95A7559A0 /* ResonaIOSTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 05F0DE71F3E5CFC61BF730C2 /* Build configuration list for PBXNativeTarget "ResonaIOSTests" */;
+			buildPhases = (
+				BFD9D6E45BC71C999FC71E03 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				DCDC6778C7D3D193CEAC7D32 /* PBXTargetDependency */,
+			);
+			name = ResonaIOSTests;
+			packageProductDependencies = (
+			);
+			productName = ResonaIOSTests;
+			productReference = 5AA25268FE2B091166E9D6A2 /* ResonaIOSTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		FC0984912893F2FD6B278C0D /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+				};
+			};
+			buildConfigurationList = 35D6EA3A4465DCB1675E6C52 /* Build configuration list for PBXProject "ResonaIOS" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 3CC68B94A72D285E308F1A4F;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 64D0C06A995422ACC4A96C87 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				639D2F6A1356FBC3A884E74E /* ResonaIOS */,
+				967CA3C0404A10D95A7559A0 /* ResonaIOSTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A5713C79DA7FB26F942B3610 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FFACD447ADB3F02C3E9A3046 /* ContentView.swift in Sources */,
+				1542CDE4F6974EC443A43F19 /* ResonaIOSApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BFD9D6E45BC71C999FC71E03 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C916C3E47B4F58B2501EFC9D /* ResonaIOSTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		DCDC6778C7D3D193CEAC7D32 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 639D2F6A1356FBC3A884E74E /* ResonaIOS */;
+			targetProxy = 30A01544C204E500067152B3 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		2220B3D69D5CB278CA9C9C68 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = Sources/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rujulw.resonaios;
+				SDKROOT = iphoneos;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		4CB608EE8674769E1C6D5247 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = Sources/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rujulw.resonaios;
+				SDKROOT = iphoneos;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		7DDBBC2B077CDA04951D760D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		AE105F3B8B40620E6795BEFA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		D5114B12D5866C3F7ACCDE52 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				SDKROOT = iphoneos;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ResonaIOS.app/ResonaIOS";
+			};
+			name = Release;
+		};
+		ECDE53C7C0B17FC124CBD32B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				SDKROOT = iphoneos;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ResonaIOS.app/ResonaIOS";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		05F0DE71F3E5CFC61BF730C2 /* Build configuration list for PBXNativeTarget "ResonaIOSTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				ECDE53C7C0B17FC124CBD32B /* Debug */,
+				D5114B12D5866C3F7ACCDE52 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		35D6EA3A4465DCB1675E6C52 /* Build configuration list for PBXProject "ResonaIOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AE105F3B8B40620E6795BEFA /* Debug */,
+				7DDBBC2B077CDA04951D760D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		55AF887119EB77C6075A3DBA /* Build configuration list for PBXNativeTarget "ResonaIOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2220B3D69D5CB278CA9C9C68 /* Debug */,
+				4CB608EE8674769E1C6D5247 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = FC0984912893F2FD6B278C0D /* Project object */;
+}

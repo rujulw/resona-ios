@@ -3,20 +3,26 @@ import SwiftData
 
 @main
 struct ResonaIOSApp: App {
-    let modelContainer: ModelContainer = {
+    let modelContainer: ModelContainer
+    let libraryStore: LibraryStore
+
+    init() {
         let schema = Schema([Track.self, LibraryRoot.self])
         let config = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
         do {
-            return try ModelContainer(for: schema, configurations: [config])
+            let container = try ModelContainer(for: schema, configurations: [config])
+            modelContainer = container
+            libraryStore = LibraryStore(container: container)
         } catch {
-            fatalError("SwiftData container failed to initialize: \(error)")
+            fatalError("SwiftData container failed: \(error)")
         }
-    }()
+    }
 
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .modelContainer(modelContainer)
+                .environment(libraryStore)
         }
     }
 }
